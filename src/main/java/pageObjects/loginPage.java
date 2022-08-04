@@ -5,6 +5,7 @@ import common.excelReader;
 import common.generalCommands;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -51,17 +52,100 @@ public class loginPage {
         //driver.navigate().refresh();
     }
 
+    public void delExisitngAds() throws InterruptedException {
+        Thread.sleep(10000);
+
+        generalCommands gem = new generalCommands();
+       // gem.scrollVertical("android.widget.LinearLayout",0.7,0.2); //b4 framelayout
+
+        //driver.findElement(AppiumBy.xpath("//android.widget.LinearLayout[@resource-id='com.ebay.kijiji.ca:id/ad_list_card']/android.view.ViewGroup")).click();
+        Thread.sleep(3000);
+        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/DeleteAd")).click();
+        Thread.sleep(5000);
+        List<WebElement> ele2 = driver.findElements(AppiumBy.className("android.widget.CompoundButton"));
+        ele2.get(2).click();
+        Thread.sleep(5000);
+        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/delete_ad_btn_container")).click();
+        Thread.sleep(3000);
+        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/delete_ad_complete_left_cta_button")).click();
+        Thread.sleep(2800);
+        gem.scrollVertical("android.widget.FrameLayout",0.2,0.5);
+        /*
+        List<WebElement> ele = driver.findElements(AppiumBy.xpath("//androidx.recyclerview.widget.RecyclerView[@resource-id='com.ebay.kijiji.ca:id/adRecyclerView']/android.widget.FrameLayout"));
+        System.out.println("No of Ads are "+ele.size());
+
+        while(ele.size()>=1) {
+            for (int i = 0; i < ele.size(); i++) {
+                Thread.sleep(5000);
+                driver.findElement(AppiumBy.xpath("//android.widget.LinearLayout[@resource-id='com.ebay.kijiji.ca:id/ad_list_card']/android.view.ViewGroup")).click();
+                Thread.sleep(5000);
+                driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/DeleteAd")).click();
+                Thread.sleep(5000);
+
+                List<WebElement> ele2 = driver.findElements(AppiumBy.className("android.widget.CompoundButton"));
+                ele2.get(2).click();
+                Thread.sleep(5000);
+                driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/delete_ad_btn_container")).click();
+                Thread.sleep(3000);
+                driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/delete_ad_complete_left_cta_button")).click();
+                Thread.sleep(2800);
+                gem.scrollVertical("android.widget.FrameLayout",0.2,0.5);
+            }
+        }
+
+         */
+    }
+
+    public boolean titleFound(int row) throws InterruptedException, IOException {
+        generalCommands gem = new generalCommands();
+        gem.scrollVertical("android.widget.LinearLayout",0.7,0.2); //b4 framelayout
+
+        excelReader ex = new excelReader();
+
+        List<WebElement> ele = driver.findElements(AppiumBy.xpath("//androidx.recyclerview.widget.RecyclerView[@resource-id='com.ebay.kijiji.ca:id/adRecyclerView']/android.widget.FrameLayout"));
+        System.out.println("No of Ads are "+ele.size());
+        boolean elemFound=false;
+        //System.out.println("Text of 1st elem is "+driver.findElement(AppiumBy.xpath("(//android.widget.TextView[@resource-id='com.ebay.kijiji.ca:id/ad_title'])["+i+"]")).getAttribute("text"));
+        //while(ele.size()>=1) {
+            L1:for (int i = 1; i <=ele.size(); i++) {
+                if(driver.findElement(AppiumBy.xpath("(//android.widget.TextView[@resource-id='com.ebay.kijiji.ca:id/ad_title'])["+i+"]")).getAttribute("text").contentEquals(ex.readData(row,0))){
+
+                    elemFound=true;
+                    ele.get(i-1).click();
+                }else{
+                    continue L1;
+                }
+
+                }
+        //}
+return elemFound;
+    }
+
     public void postAd_AddImage() throws InterruptedException {
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/post")).click();
-        Thread.sleep(2000);
-        driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button")).click();
-        Thread.sleep(2000);
-        driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_button")).click();
-        Thread.sleep(1000);
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_capture")).click();
-        Thread.sleep(1000);
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_save")).click();
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_next")).click();
+        try{
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/post")).click();
+            Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button")).click();
+            Thread.sleep(2000);
+            driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_button")).click();
+            Thread.sleep(1000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_capture")).click();
+            Thread.sleep(1000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_save")).click();
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_next")).click();
+        }catch(Exception e){
+           // driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/post")).click();
+            Thread.sleep(5000);
+            //driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button")).click();
+            //Thread.sleep(2000);
+          //  driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_button")).click();
+           // Thread.sleep(1000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_capture")).click();
+            Thread.sleep(1000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_save")).click();
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/btn_next")).click();
+        }
+
     }
 
     public void postAdDesc_Ttl2Prc() throws InterruptedException, IOException {
@@ -121,7 +205,11 @@ public class loginPage {
         driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/price_text")).click();
         //Thread.sleep(5000);
         Actions at2 = new Actions(driver);
-        at2.sendKeys(read.readData(1,7)).build().perform();
+
+        at2.sendKeys(read.readData(1,7));
+        Thread.sleep(2500);
+        at2.build().perform();
+        System.out.println("Price is "+read.readData(1,7));
 
         Thread.sleep(2000);
 
@@ -129,22 +217,45 @@ public class loginPage {
     }
 
     public void postAdDesc_LoctnNContac() throws InterruptedException, IOException {
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/post_ad_location_contact_spoke")).click();
+        try{
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/post_ad_location_contact_spoke")).click();
 
-        Thread.sleep(2000);
-        driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button")).click();
-        Thread.sleep(2000);
+            Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button")).click();
+            Thread.sleep(5000);
 
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/universal_address_clear")).click();
-    Thread.sleep(5000);
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/universal_address_entry")).sendKeys(read.readData(1,8));
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/universal_address_clear")).click();
+            Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/universal_address_entry")).sendKeys(read.readData(1,8));
 
-       Thread.sleep(20000);
+            Thread.sleep(25000);
 
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/action_button_apply")).click();
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/action_button_apply")).click();
 
-        Thread.sleep(2000);
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/action_button_apply")).click();
+            Thread.sleep(2000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/action_button_apply")).click();
+        }catch (Exception e) {
+/*
+
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/post_ad_location_contact_spoke")).click();
+
+            Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button")).click();
+
+ */
+            Thread.sleep(5000);
+
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/universal_address_clear")).click();
+            Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/universal_address_entry")).sendKeys(read.readData(1, 8));
+
+            Thread.sleep(25000);
+
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/action_button_apply")).click();
+
+            Thread.sleep(2000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/action_button_apply")).click();
+        }
 
         //Thread.sleep(5000);
 
@@ -160,16 +271,32 @@ public class loginPage {
     }
 
     public void postAdDesc_Apply() throws InterruptedException {
-       // Thread.sleep(15000);
-        Thread.sleep(5000);
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/dialog_button_positive")).click();
-        Thread.sleep(5000);
+        try{
+            Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/dialog_button_positive")).click();
+            Thread.sleep(7000);
 
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/skip")).click();
-        Thread.sleep(2000);
-        String sucessAd = driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/success")).getAttribute("text");
-        System.out.println(sucessAd);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/skip")).click();
+            Thread.sleep(2000);
+            String sucessAd = driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/success")).getAttribute("text");
+            System.out.println(sucessAd);
 
-        driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/close")).click();
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/close")).click();
+        }catch(Exception e){
+            // Thread.sleep(15000);
+       /*     Thread.sleep(5000);
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/dialog_button_positive")).click();
+
+        */
+            Thread.sleep(7000);
+
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/skip")).click();
+            Thread.sleep(2000);
+            String sucessAd = driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/success")).getAttribute("text");
+            System.out.println(sucessAd);
+
+            driver.findElement(AppiumBy.id("com.ebay.kijiji.ca:id/close")).click();
+        }
+
     }
 }

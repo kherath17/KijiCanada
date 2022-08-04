@@ -16,15 +16,8 @@ public class testClass {
 
     @Test
     public void launchApp() throws InterruptedException, IOException {
-        /*
-        loginPage lop = new loginPage();
-        lop.clkLocationOff();
-        lop.login();
-        lop.verifyLoggedIn();
-        lop.postAd();
-
-         */
         function go = new function();
-        go.PostAd();
+        //go.PostAd();
+        go.postAd2();
     }
 }
